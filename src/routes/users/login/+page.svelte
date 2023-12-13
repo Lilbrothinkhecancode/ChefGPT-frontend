@@ -14,7 +14,7 @@
     };
 
     const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-    const loginUrl = new URL('/users/login', baseUrl);
+    const loginUrl = new URL('/auth', baseUrl);
 
     const response = await fetch(loginUrl.href, {
       method: 'POST',
@@ -31,14 +31,14 @@
 
     console.log('Response body:', result);
 
-    if (result.accessToken) {
-      console.log('Login successful');
-      window.alert('Login successful!');
-      window.location.href = '/';
-    } else {
-      console.log('Login failed');
-      error = 'Invalid credentials. Please try again.';
-    }
+    if (result.result && result.result.token && result.result.Id) {
+  console.log('Login successful');
+  window.alert('Login successful!');
+  window.location.href = '/';
+} else {
+  console.log('Login failed');
+  error = 'Invalid credentials. Please try again.';
+}
 
     isSubmitting = false;
   }

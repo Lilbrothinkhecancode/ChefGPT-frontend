@@ -22,7 +22,7 @@
       console.log(userData);
   
       const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-      const url = new URL('/users/new', baseUrl);
+      const url = new URL('/users', baseUrl);
   
       const resp = await fetch(url.href, {
         method: 'POST',
