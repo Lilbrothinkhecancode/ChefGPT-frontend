@@ -1,12 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
+    import { IsLoggedIn } from '/home/ulyger/chefgptbackend/chefgptfrontend/src/utils/stores.js';
     let formErrors = {};
-  
-    function postSignUp() {
-      const successMessage = "Sign-up successful!";
-      window.alert(successMessage);
-      goto('/');
-    }
   
     async function createUser(evt) {
       evt.preventDefault();
@@ -35,12 +30,8 @@
   
       if (resp.status === 200) {
         goto('/');
+        IsLoggedIn.set(true);
   
-        if (Response.success) {
-          postSignUp();
-        } else {
-          throw 'Sign up succeeded but authentication failed';
-        }
       }
     }
   </script>

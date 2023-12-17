@@ -1,4 +1,7 @@
 <script>
+  import { IsLoggedIn } from '/home/ulyger/chefgptbackend/chefgptfrontend/src/utils/stores.js';
+  import { goto } from '$app/navigation';
+
   let email = '';
   let password = '';
   let error = '';
@@ -28,22 +31,25 @@
     console.log('Response status:', response.status);
 
     const result = await response.json();
+    console.log('Login Response:', result);
 
     console.log('Response body:', result);
 
     if (result.result && result.result.token && result.result.Id) {
-  console.log('Login successful');
-  window.alert('Login successful!');
-  window.location.href = '/';
-} else {
-  console.log('Login failed');
-  error = 'Invalid credentials. Please try again.';
-}
+      const token = result.result.token;
+  console.log('Received token:', token);
+      console.log('Login successful');
+      window.alert('Login successful!');
+      IsLoggedIn.set(true); // Update the store
+      goto('/');
+    } else {
+      console.log('Login failed');
+      error = 'Invalid credentials. Please try again.';
+    }
 
     isSubmitting = false;
   }
 </script>
-
 
   <h1 class="text-center text-xl font-bold">Log In</h1>
   
