@@ -1,24 +1,52 @@
 <script>
-  import { goto } from '$app/navigation';
-  import { searchQuery } from '../routes/results/SearchContext';
-  let query = '';
+import { onMount } from 'svelte';
+  import { get } from 'svelte/store';
+  import { searchQuery } from '../results/SearchContext';
+  import SvelteMarkdown from 'svelte-markdown';
 
-function gotoResults() {
-    searchQuery.set(query);
-    goto('/results');
-}
-
+  let results = [];
+  let query = ''; 
 
 
-	
+  onMount(() => {
+    query = get(searchQuery); // Updates the query variable with the value from the store
+    console.log(query)
+  });
+  
+  async function searchRecipes (evt) {
+    try {
+      evt.preventDefault();
+      let query = evt.target['search-dropdown'].value;
+      const apiKey = '83eab374e3454069b2896561df305f55';
+      const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
+      const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
+
+    //   const apiUrl = 'https://api.spoonacular.com/recipes/findByIngredients';
+    //   const url = `${apiUrl}?apiKey=${apiKey}&ingredients=${query}`;
+
+      const response = await fetch(url);
+      console.log(response)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      results = data.results
+      console.log(data)
+      return data 
+      
+    
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 </script>
 
-<main class="flex flex-col items-center h-screen">
-	<h1 class="text-7xl text-slate-950 font-black mb-4 mt-10 pt-20">ChefGPT</h1>
 
- 
+<!-- Search Bar -->
 
-    <form on:submit={gotoResults} class="w-7/12 pt-4">
+<form on:submit|preventDefault={searchRecipes} class="w-7/12 pt-4 pl-20">
         <div class="flex">
             <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
             <button id="dropdown-button" data-dropdown-toggle="dropdown"
@@ -49,10 +77,9 @@ function gotoResults() {
                 </ul>
             </div>
             <div class="relative w-full">
-                <input type="search" id="search-dropdown" bind:value={query}
+                <input type="search" id="search-dropdown"
                     class="block p-4 w-full z-20 text-sm text-black bg-white rounded-e-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-s-gray-300 dark:border-gray-300 dark:placeholder-gray-400 dark:text-black dark:focus:border-blue-500"
-                    placeholder="Search Food, Recipes or Ingredients" required>
-                    
+                    placeholder="Search Food, Ingredients and Recipes" required>
                 <button type="submit"
                     class="absolute top-0 end-0 p-4 text-sm font-medium h-full text-white bg-rose-700 rounded-e-lg border border-rose-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-rose-800">
                     <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -65,33 +92,24 @@ function gotoResults() {
             </div>
         </div>
     </form>
-
-
-
-
-<div>
-    <div class="ml-72 pt-12 font-light mb">
-        <h3 class="text-xl"> This Week's Trending </h3>
-        <hr class="h-px my-2 bg-rose-200 border-0 dark:bg-rose-400 w-64 mb-4">
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 pr-72 pl-72 pb-64 pt-8">
-        
-        <div>
-            <img class="h-64 w-64" src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGFzdGF8ZW58MHx8MHx8fDA%3D" alt="">
-        </div>
-        <div>
-            <img class="h-64 w-64" src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGFzdGF8ZW58MHx8MHx8fDA%3D" alt="">
-        </div>
-        <div>
-            <img class="h-64 w-64" src="https://images.unsplash.com/photo-1579684947550-22e945225d9a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHBhc3RhfGVufDB8fDB8fHww" alt="">
-        </div>
-       
     
-    </div>
-</div>
-
-
     
 
-</main>
+    <div class="grid grid-cols-3 md:grid-cols-3 gap-6 pr-24 pl-24 pt-24">
+                {#each results as recipe (recipe.id)}
+                    <div>
+
+                        <img class="items-start pb-4 max-w-sm rounded" src={recipe.image} alt={recipe.title}>    
+                        <h3 class = "text-xl text-black pr-4">{recipe.title}   </h3> 
+                        <p class='text-xs text-slate-500' pb-6>  {recipe.nutrition.nutrients[0].amount} kcal </p>
+                       
+                        
+
+                        <div class='pr-14 pb-4 pt-3'>
+                            <SvelteMarkdown source={recipe.summary.slice(0, 180)}... />
+                        </div>
+                    </div> 
+                {/each}
+            </div>
+
+          

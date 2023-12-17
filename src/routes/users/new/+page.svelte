@@ -11,10 +11,8 @@
         name: evt.target['name'].value,
         email: evt.target['email'].value,
         password: evt.target['password'].value,
-        passwordConfirm: evt.target['password-confirmation'].value
+        
       };
-  
-      console.log(userData);
   
       const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
       const url = new URL('/users', baseUrl);

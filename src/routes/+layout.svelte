@@ -4,6 +4,7 @@
   import { logOut, isLoggedIn } from '../utils/auth.js';
   import { IsLoggedIn } from '../utils/stores.js';
 
+
   export let title = 'ChefGPT';
 
   const handleStorageChange = () => {
