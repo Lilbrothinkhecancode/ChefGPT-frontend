@@ -5,18 +5,45 @@
       import SvelteMarkdown from 'svelte-markdown';
     
       let results = [];
-      let query = ''; 
-    
+      let query = get(_searchQuery);
+      
     
       onMount(() => {
-        query = get(searchQuery); // Updates the query variable with the value from the store
-        console.log(query)
-      });
+    homeSearch(query);
+    console.log(query)
+  });
+      
+
+  async function homeSearch (query) {
+        try {
+          const apiKey = '63618f23b8ca4fcbbad11613a7dfca15';
+          const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
+          const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
+    
+        //   const apiUrl = 'https://api.spoonacular.com/recipes/findByIngredients';
+        //   const url = `${apiUrl}?apiKey=${apiKey}&ingredients=${query}`;
+    
+          const response = await fetch(url);
+          console.log(response)
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+    
+          const data = await response.json();
+          results = data.results
+          console.log(data)
+          return data 
+          
+        
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
       
       async function searchRecipes (evt) {
         try {
-          evt.preventDefault();
-          let query = evt.target['search-dropdown'].value;
+          let query = evt.target['search'].value;
           const apiKey = '63618f23b8ca4fcbbad11613a7dfca15';
           const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
           const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
@@ -44,11 +71,11 @@
     </script>
     
     
-    <!-- Search Bar -->
-    
-    <form on:submit|preventDefault={searchRecipes} class="w-7/12 pt-4 pl-20">
+  
+   
+    <form on:submit={searchRecipes} class="w-7/12 pt-4 pl-20">
             <div class="flex">
-                <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
+                <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
                 <button id="dropdown-button" data-dropdown-toggle="dropdown"
                     class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-white dark:hover:bg-gray-200 dark:focus:ring-gray-200 dark:text-black dark:border-gray-300 dark:border-s-gray-300"
                     type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
@@ -77,7 +104,7 @@
                     </ul>
                 </div>
                 <div class="relative w-full">
-                    <input type="search" id="search-dropdown"
+                    <input type="search" id="search"
                         class="block p-4 w-full z-20 text-sm text-black bg-white rounded-e-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-s-gray-300 dark:border-gray-300 dark:placeholder-gray-400 dark:text-black dark:focus:border-blue-500"
                         placeholder="Search Food, Ingredients and Recipes" required>
                     <button type="submit"
