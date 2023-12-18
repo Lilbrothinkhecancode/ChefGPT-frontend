@@ -1,3 +1,8 @@
+<script>
+    import { isLoggedIn } from '../utils/auth';
+    import { logOut } from '../utils/auth';
+</script>
+
 <header class="bg-white text-black relative h-20 pl-20 ">
     <div class="p-2 flex items-center h-full">
         <a href="/" class="font-black text-2xl"> ChefGPT </a>
@@ -9,6 +14,14 @@
         <a href="/users/profile" class="mr-4 font-light">My Kitchen</a>
         <a href="/bookmarks" class="mr-4 font-light ">Bookmarks</a>
         <a href="/users/new" class="mr-4 font-light">Sign Up</a>
-        <a href="/users/login" class =" font-light">Login</a>
+       
+
+    {#if $isLoggedIn == false}
+    <a href="/users/login" class =" font-light">Login</a>
+	{:else}
+    <button class=" font-light" on:click={logOut}>Log Out</button>
+		
+	{/if}
+     
     </div>
 </header>

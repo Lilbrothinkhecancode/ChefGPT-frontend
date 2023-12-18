@@ -1,11 +1,18 @@
 <script>
-  let email = '';
-  let password = '';
+import { goto } from '$app/navigation';
+import {authenticateUser} from '../../../utils/auth';
+import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
+
+function postSignIn() {
+		goto('../');
+	}
+
+
   let error = '';
-  let isSubmitting = false;
+ 
 
   async function handleLogin(evt) {
-    isSubmitting = true;
+ 
     evt.preventDefault();
 
     const userData = {
@@ -13,34 +20,16 @@
       password: evt.target['password'].value,
     };
 
-    const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-    const loginUrl = new URL('/users/login', baseUrl);
 
-    const response = await fetch(loginUrl.href, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
+    const response = await authenticateUser(userData.email, userData.password)
 
-    console.log('Response status:', response.status);
 
-    const result = await response.json();
+    if (response.success) {
+			postSignIn();
+		} else {
+			throw 'Login Failed';
+		}
 
-    console.log('Response body:', result);
-
-    if (result.accessToken) {
-      console.log('Login successful');
-      window.alert('Login successful!');
-      window.location.href = '/';
-    } else {
-      console.log('Login failed');
-      error = 'Invalid credentials. Please try again.';
-    }
-
-    isSubmitting = false;
   }
 </script>
 
@@ -53,14 +42,14 @@
         <label class="label" for="username">
           <span>Email</span>
         </label>
-        <input type="text" name="email" bind:value={email} required class="input input-bordered w-full" />
+        <input type="text" name="email" required class="input input-bordered w-full" />
       </div>
   
       <div class="form-control w-full">
         <label class="label" for="password">
           <span>Password</span>
         </label>
-        <input type="password" name="password" bind:value={password} required class="input input-bordered w-full" />
+        <input type="password" name="password" required class="input input-bordered w-full" />
       </div>
   
       {#if error}
@@ -68,11 +57,8 @@
       {/if}
   
       <div class="form-control w-full mt-4">
-        {#if isSubmitting}
-        <button class="btn btn-md">Log In</button>
-        {:else}
-          <button class="btn btn-md">Log In</button>
-        {/if}
+
+        <button class="btn btn-md">Log In</button>  
       </div>
     </form>
   </div>
