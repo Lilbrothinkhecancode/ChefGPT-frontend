@@ -5,7 +5,7 @@
 
 function gotoResults() {
     _searchQuery.set(query);
-    setTimeout(()=> goto('/results'), 0);
+    setTimeout(()=> goto(`/results?query=${query}`), 0);
 }
 
 
@@ -93,9 +93,6 @@ function gotoResults() {
 </div>
 
 
-<form on:submit={test}>
-<button type ='submit'> test </button>
-</form>
     
 
 </main>

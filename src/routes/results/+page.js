@@ -1,5 +1,8 @@
 import { writable } from 'svelte/store';
-export const _searchQuery = writable(true)
+
+
+const initialQuery = '';
+export const _searchQuery = writable(initialQuery)
 
 
 
