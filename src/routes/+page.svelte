@@ -1,6 +1,8 @@
 <script>
   import { goto } from '$app/navigation';
   import { _searchQuery } from '../routes/results/+page'
+  
+
   let query = '';
 
 function gotoResults() {
@@ -92,10 +94,5 @@ function gotoResults() {
     </div>
 </div>
 
-
-<form on:submit={test}>
-<button type ='submit'> test </button>
-</form>
-    
 
 </main>

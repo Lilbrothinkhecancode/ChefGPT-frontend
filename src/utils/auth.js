@@ -1,6 +1,8 @@
 import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
 import { writable } from 'svelte/store';
-export const isLoggedIn = writable(false);
+
+export const isLoggedIn = writable(false)
+
 
 const emptyAuth = {
 	token: '',
@@ -67,7 +69,7 @@ export async function isValidToken() {
 }
 
 export async function authenticateUser(email, password) {
-	const resp = await fetch(PUBLIC_BACKEND_BASE_URL + '/auth', {
+	const resp = await fetch(PUBLIC_BACKEND_BASE_URL + '/users/login', {
 		method: 'POST',
 		mode: 'cors',
 		headers: {
@@ -83,24 +85,20 @@ export async function authenticateUser(email, password) {
 	// console.log(res)
 
 	if (resp.status == 200) {
-		localStorage.setItem(
-			'auth',
-			JSON.stringify({
-				token: res.accessToken
-				// refreshToken: res.refreshToken,
-				// userId: res.record.id
-			})
-		);
-		isLoggedIn.set(true);
-
+		localStorage.setItem("auth", JSON.stringify({
+		  "token": res.result.token,
+		  "userId": res.result.Id
+		}));
+		isLoggedIn.set(true)
+	
 		return {
-			success: true,
-			res: res
-		};
-	}
-
-	return {
+		  success: true,
+		  res: res
+		}
+	  }
+	
+	  return {
 		success: false,
 		res: res
-	};
+	  }
 }
