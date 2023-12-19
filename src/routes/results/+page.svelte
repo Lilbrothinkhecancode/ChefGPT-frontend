@@ -13,7 +13,7 @@
     homeSearch(query);
     console.log(query)
   });
-      
+  
 
   async function homeSearch (query) {
         try {

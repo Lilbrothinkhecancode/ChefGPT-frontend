@@ -5,16 +5,19 @@
 
   let query = '';
 
+
+
+
 function gotoResults() {
     _searchQuery.set(query);
     setTimeout(()=> goto(`/results?query=${query}`), 0);
 }
 
-
-
-
-	
 </script>
+
+
+
+
 
 <main class="flex flex-col items-center h-screen">
 	<h1 class="text-7xl text-slate-950 font-black mb-4 mt-10 pt-20">ChefGPT</h1>
