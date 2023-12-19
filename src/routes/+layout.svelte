@@ -37,6 +37,7 @@
       <a href="/bookmarks" class="font-light">Bookmarks</a>
     </nav>
 
+
     <div class="flex items-center">
       {#if $IsLoggedIn}
         <button on:click={logOut} class="mr-4 font-light" aria-label="Log Out">Log Out</button>
@@ -64,3 +65,6 @@
 </footer>
 
 <slot />
+
+  <slot />
+
