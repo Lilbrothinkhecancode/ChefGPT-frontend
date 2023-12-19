@@ -1,9 +1,8 @@
 <script>
+import { recipes } from '/src/utils/stores.js';
 
 </script>
 
-
-<!-- Search Bar -->
 
 <form class="w-7/12 pt-4 pl-20">
         <div class="flex">
@@ -56,4 +55,33 @@
 
 <div class=""> 
 
+</div>
+
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .card img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="cards-container">
+    {#each Object.keys($recipes) as id}
+        <div class="card">
+            {#if $recipes[id].image}
+                <img src={URL.createObjectURL($recipes[id].image)} alt={$recipes[id].title}>
+            {/if}
+            <a href={`/recipes/${id}`}>{$recipes[id].title}</a>
+        </div>
+    {/each}
 </div>

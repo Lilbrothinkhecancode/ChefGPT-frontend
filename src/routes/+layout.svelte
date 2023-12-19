@@ -32,7 +32,7 @@
 
   <div class="flex items-center gap-5">
     <nav>
-      <a href="/recipes" class="font-light">Recipes</a>
+      <a href="/recipes/all" class="font-light">Recipes</a>
       <a href="/users/profile" class="font-light">My Kitchen</a>
       <a href="/bookmarks" class="font-light">Bookmarks</a>
     </nav>

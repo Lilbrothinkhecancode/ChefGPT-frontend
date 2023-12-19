@@ -1,6 +1,5 @@
 <script>
     import { goto } from '$app/navigation';
-    import { _searchQuery } from '../routes/results/+page'
     
   
     let query = '';
@@ -9,11 +8,12 @@
       _searchQuery.set(query);
       setTimeout(()=> goto(`/results?query=${query}`), 0);
   }
+
+  function gotoUpload() {
+        setTimeout(()=> goto('/upload'), 0);
+    }
   
-  
-  
-  
-      
+
   </script>
   
   <main class="flex flex-col items-center h-screen">
@@ -68,6 +68,10 @@
               </div>
           </div>
       </form>
+
+      <button on:click={gotoUpload} class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        Upload
+    </button>
   
   
   
