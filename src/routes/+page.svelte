@@ -10,16 +10,12 @@ function gotoResults() {
     setTimeout(()=> goto(`/results?query=${query}`), 0);
 }
 
-
-
-
-	
 </script>
 
-<main class="flex flex-col items-center h-screen">
+<main class="flex flex-col items-center min-h-screen pb-1">
 	<h1 class="text-7xl text-slate-950 font-black mb-4 mt-10 pt-20">ChefGPT</h1>
 
- 
+
 
     <form on:submit={gotoResults} class="w-7/12 pt-4">
         <div class="flex">
@@ -78,7 +74,7 @@ function gotoResults() {
         <hr class="h-px my-2 bg-rose-200 border-0 dark:bg-rose-400 w-64 mb-4">
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 pr-72 pl-72 pb-64 pt-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 pr-72 pl-72 pt-8">
         
         <div>
             <img class=" aspect-square object-cover responsive" src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGFzdGF8ZW58MHx8MHx8fDA%3D" alt="">
