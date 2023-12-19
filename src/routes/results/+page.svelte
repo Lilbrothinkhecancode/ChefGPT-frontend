@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
       import { get } from 'svelte/store';
       import { _searchQuery } from './+page';
+      import { PUBLIC_SPOON_API_KEY } from '$env/static/public';
       import SvelteMarkdown from 'svelte-markdown';
       import { PUBLIC_SPOONACULAR_API_KEY } from '$env/static/public';
       // export let data;
@@ -17,11 +18,12 @@
 
   async function homeSearch (query) {
         try {
-          const apiKey = PUBLIC_SPOONACULAR_API_KEY
+        
           const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
           const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
     
-      
+        //   const apiUrl = 'https://api.spoonacular.com/recipes/findByIngredients';
+        //   const url = `${apiUrl}?apiKey=${apiKey}&ingredients=${query}`;
     
           const response = await fetch(url);
           console.log(response)
@@ -44,13 +46,11 @@
       async function searchRecipes (evt) {
         try {
           let query = evt.target['search'].value;
-          const apiKey = '63618f23b8ca4fcbbad11613a7dfca15';
+          const apiKey = PUBLIC_SPOON_API_KEY;
           const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
           const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
     
-        //   const apiUrl = 'https://api.spoonacular.com/recipes/findByIngredients';
-        //   const url = `${apiUrl}?apiKey=${apiKey}&ingredients=${query}`;
-    
+       
           const response = await fetch(url);
           console.log(response)
     
