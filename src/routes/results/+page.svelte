@@ -3,7 +3,8 @@
       import { get } from 'svelte/store';
       import { _searchQuery } from './+page';
       import SvelteMarkdown from 'svelte-markdown';
-    
+      import { PUBLIC_SPOONACULAR_API_KEY } from '$env/static/public';
+      // export let data;
       let results = [];
       let query = get(_searchQuery);
       
@@ -16,12 +17,11 @@
 
   async function homeSearch (query) {
         try {
-          const apiKey = '63618f23b8ca4fcbbad11613a7dfca15';
+          const apiKey = PUBLIC_SPOONACULAR_API_KEY
           const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
           const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
     
-        //   const apiUrl = 'https://api.spoonacular.com/recipes/findByIngredients';
-        //   const url = `${apiUrl}?apiKey=${apiKey}&ingredients=${query}`;
+      
     
           const response = await fetch(url);
           console.log(response)
@@ -125,10 +125,12 @@
         <div class="grid grid-cols-3 md:grid-cols-3 gap-6 pr-24 pl-24 pt-24">
                     {#each results as recipe (recipe.id)}
                         <div>
-    
+                          <a href="/recipes/{recipe.id}"> 
                             <img class="items-start pb-4 max-w-sm rounded" src={recipe.image} alt={recipe.title}>    
                             <h3 class = "text-xl text-black pr-4">{recipe.title}   </h3> 
                             <p class='text-xs text-slate-500' pb-6>  {recipe.nutrition.nutrients[0].amount} kcal </p>
+                          </a>
+
                            
                             
     
