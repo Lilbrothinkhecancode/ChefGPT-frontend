@@ -14,14 +14,7 @@
     console.log('New IsLoggedIn:', IsLoggedIn);
   };
 
-  // Triggered after successful login or signup
-  function handleSuccessfulAuthentication() {
-    IsLoggedIn.set(true);
-    window.addEventListener('storage', handleStorageChange);
-  }
-
   onMount(async () => {
-    // Delay the initialization
     setTimeout(async () => {
       IsLoggedIn.set(await isLoggedIn());
     }, 0);
@@ -46,10 +39,8 @@
 
     <div class="flex items-center">
       {#if $IsLoggedIn}
-        <!-- Display "Log Out" button when the user is authenticated -->
         <button on:click={logOut} class="mr-4 font-light" aria-label="Log Out">Log Out</button>
       {:else}
-        <!-- Display "Sign Up" and "Log In" links when the user is not authenticated -->
         <a href="/users/new" class="mr-4 font-light">Sign Up</a>
         <a href="/users/login" class="font-light">Login</a>
       {/if}
@@ -57,12 +48,19 @@
   </div>
 </header>
 
+<style>
+  nav {
+    display: flex;
+    gap: 20px; 
+  }
+</style>
+
 <body class="bg-white">
-  <!-- Your body content goes here -->
+
 </body>
 
 <footer class="bg-slate-50">
-  <!-- Your footer content goes here -->
+
 </footer>
 
 <slot />
