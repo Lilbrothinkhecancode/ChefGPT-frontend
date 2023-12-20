@@ -33,6 +33,7 @@
   }
 </script>
 
+<body>
 <div>
   <div class="header">
     <h1>Meal Prep</h1>
@@ -159,3 +160,4 @@
     margin-bottom: 50px;
   }
 </style>
+</body>
