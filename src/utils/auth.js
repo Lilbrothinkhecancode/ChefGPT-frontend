@@ -5,9 +5,9 @@ export const isLoggedIn = writable(false)
 
 
 const emptyAuth = {
-	token: '',
-	userId: ''
-};
+	"token": "",
+	"userId": ""
+  }
 
 export function logOut() {
 	localStorage.setItem('auth', JSON.stringify(emptyAuth));
@@ -17,12 +17,12 @@ export function logOut() {
 }
 
 export function getUserId() {
-	const auth = localStorage.getItem('auth');
+	const auth = localStorage.getItem("auth")
 	if (auth) {
-		return JSON.parse(auth)['userId'];
+	  return JSON.parse(auth)["userId"]
 	}
-	return null;
-}
+	return null
+  }
 
 export function getTokenFromLocalStorage() {
 	const auth = localStorage.getItem('auth');
@@ -82,7 +82,7 @@ export async function authenticateUser(email, password) {
 	});
 
 	const res = await resp.json();
-	// console.log(res)
+
 
 	if (resp.status == 200) {
 		localStorage.setItem("auth", JSON.stringify({

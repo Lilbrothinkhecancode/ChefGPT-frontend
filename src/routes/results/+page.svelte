@@ -11,7 +11,6 @@
     
       onMount(() => {
     homeSearch(query);
-    console.log(query)
   });
       
 
