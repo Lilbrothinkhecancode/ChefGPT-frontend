@@ -79,7 +79,7 @@ import { recipes } from '/src/utils/stores.js';
     {#each Object.keys($recipes) as id}
         <div class="card">
             {#if $recipes[id].image}
-                <img src={URL.createObjectURL($recipes[id].image)} alt={$recipes[id].title}>
+                <img src={$recipes[id].image} alt={$recipes[id].title}> <!-- $recipes[id].image is a data URL -->
             {/if}
             <a href={`/recipes/${id}`}>{$recipes[id].title}</a>
         </div>

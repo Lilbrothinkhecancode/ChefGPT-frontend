@@ -101,10 +101,16 @@ export async function authenticateUser(email, password) {
     const res = await resp.json();
 
     if (resp.status == 200 && res.result && res.result.token && res.result.Id) {
-      localStorage.setItem("auth", JSON.stringify({
+      const auth = {
         "token": res.result.token,
         "userId": res.result.Id
-      }));
+      };
+      console.log('Auth:', auth); // Log the auth object
+
+      localStorage.setItem("auth", JSON.stringify(auth));
+
+      // Log the result of storing the auth object in local storage
+      console.log('Auth in local storage:', localStorage.getItem("auth"));
 
       // Call the function to handle successful authentication
       handleSuccessfulAuthentication();

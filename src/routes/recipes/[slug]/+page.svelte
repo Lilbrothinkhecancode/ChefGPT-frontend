@@ -3,6 +3,10 @@
     import { page } from '$app/stores';
 
     let slug = $page.params.slug;
+
+    $: if ($recipes[slug] && $recipes[slug].image) {
+        console.log($recipes[slug].image);
+    }
 </script>
 
 <style>
@@ -62,7 +66,7 @@
         </div>
         {#if $recipes[slug].image}
             <div class="card image-card">
-                <img src={URL.createObjectURL($recipes[slug].image)} alt={$recipes[slug].title}>
+                <img src={$recipes[slug].image} alt={$recipes[slug].title}> <!-- $recipes[slug].image is a data URL -->
             </div>
         {/if}
     </div>

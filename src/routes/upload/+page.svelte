@@ -1,6 +1,7 @@
 <script>
     import { recipes } from '../../utils/stores.js';
     import { goto } from '$app/navigation';
+    import { isLoggedIn } from '../../utils/auth.js';
 
     let title = '';
     let description = '';
@@ -8,17 +9,33 @@
     let prepTime = '';
     let image;
 
-    function handleSubmit() {
-        const id = Date.now().toString();
-        recipes.update(currentRecipes => ({
-            ...currentRecipes,
-            [id]: { title, description, ingredients, prepTime, image }
-        }));
-        goto(`/recipes/${id}`);
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                image = reader.result; // This is a data URL
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
-    function handleImageUpload(event) {
-        image = event.target.files[0];
+    async function handleSubmit() {
+        // Check if user is logged in
+        const loggedIn = await isLoggedIn();
+        console.log('loggedIn:', loggedIn); // Log the value of loggedIn
+        if (!loggedIn) {
+            alert('You must be logged in to upload a recipe.');
+            return;
+        }
+
+        try {
+            const id = Date.now().toString();
+            recipes.addRecipe(id, { title, description, ingredients, prepTime, image }); // image is a data URL
+            goto(`/recipes/${id}`);
+        } catch (error) {
+            console.error('Error in handleSubmit:', error); // Log any errors
+        }
     }
 </script>
 

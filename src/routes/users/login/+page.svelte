@@ -1,6 +1,7 @@
 <script>
-  import { IsLoggedIn } from '/home/ulyger/chefgptbackend/chefgptfrontend/src/utils/stores.js';
+  import { IsLoggedIn } from '../../../utils/stores.js';
   import { goto } from '$app/navigation';
+  import { authenticateUser } from '../../../utils/auth.js';
 
   let email = '';
   let password = '';
@@ -11,33 +12,13 @@
     isSubmitting = true;
     evt.preventDefault();
 
-    const userData = {
-      email: evt.target['email'].value,
-      password: evt.target['password'].value,
-    };
+    const email = evt.target['email'].value;
+    const password = evt.target['password'].value;
 
-    const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-    const loginUrl = new URL('/auth', baseUrl);
-
-    const response = await fetch(loginUrl.href, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    console.log('Response status:', response.status);
-
-    const result = await response.json();
+    const result = await authenticateUser(email, password);
     console.log('Login Response:', result);
 
-    console.log('Response body:', result);
-
-    if (result.result && result.result.token && result.result.Id) {
-      const token = result.result.token;
-  console.log('Received token:', token);
+    if (result.success) {
       console.log('Login successful');
       window.alert('Login successful!');
       IsLoggedIn.set(true); // Update the store

@@ -1,37 +1,44 @@
 <script>
     import { goto } from '$app/navigation';
     import { IsLoggedIn } from '/home/ulyger/chefgptbackend/chefgptfrontend/src/utils/stores.js';
+    import { authenticateUser } from '../../../utils/auth.js';
     let formErrors = {};
   
     async function createUser(evt) {
-      evt.preventDefault();
-  
-  
-      const userData = {
-        name: evt.target['name'].value,
-        email: evt.target['email'].value,
-        password: evt.target['password'].value,
-        
-      };
-  
-      const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-      const url = new URL('/users', baseUrl);
-  
-      const resp = await fetch(url.href, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      });
-  
-      if (resp.status === 200) {
+    evt.preventDefault();
+
+    const userData = {
+      name: evt.target['name'].value,
+      email: evt.target['email'].value,
+      password: evt.target['password'].value,
+    };
+
+    const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
+    const url = new URL('/users', baseUrl);
+
+    const resp = await fetch(url.href, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData)
+    });
+
+    if (resp.status === 200) {
+      const result = await authenticateUser(userData.email, userData.password);
+      console.log('Authentication Response:', result);
+
+      if (result.success) {
+        console.log('Authentication successful');
+        IsLoggedIn.set(true); // Update the store
         goto('/');
-        IsLoggedIn.set(true);
-  
+      } else {
+        console.log('Authentication failed');
+        formErrors = { 'email': { message: 'Invalid credentials. Please try again.' } };
       }
     }
+  }
   </script>
 
 
