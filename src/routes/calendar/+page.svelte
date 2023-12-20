@@ -91,8 +91,9 @@
   }
 
   .meal-card {
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    border: 1px solid #ebebeb;
+    border-radius: 0.125rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     padding: 0px; 
     margin-top: 5px; 
     margin-left: 0; 

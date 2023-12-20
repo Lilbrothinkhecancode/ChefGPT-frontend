@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
       import { get } from 'svelte/store';
       import { _searchQuery } from './+page';
-      import { PUBLIC_SPOON_API_KEY } from '$env/static/public';
       import SvelteMarkdown from 'svelte-markdown';
       import { PUBLIC_SPOONACULAR_API_KEY } from '$env/static/public';
       // export let data;
@@ -20,7 +19,7 @@
         try {
         
           const apiUrl = 'https://api.spoonacular.com/recipes/complexSearch';
-          const url = `${apiUrl}?apiKey=${apiKey}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
+          const url = `${apiUrl}?apiKey=${PUBLIC_SPOONACULAR_API_KEY}&query=${query}&addRecipeInformation=true&addRecipeNutrition=true`;
     
         //   const apiUrl = 'https://api.spoonacular.com/recipes/findByIngredients';
         //   const url = `${apiUrl}?apiKey=${apiKey}&ingredients=${query}`;
