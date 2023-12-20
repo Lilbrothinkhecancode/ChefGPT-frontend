@@ -3,9 +3,10 @@
       import { get } from 'svelte/store';
       import { _searchQuery } from './+page';
       import SvelteMarkdown from 'svelte-markdown';
-      // export let data;
+      import { PUBLIC_SPOON_API_KEY } from '$env/static/public';
       let results = [];
       let query = get(_searchQuery);
+
       
     
       onMount(() => {
