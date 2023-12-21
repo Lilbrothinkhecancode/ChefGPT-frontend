@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 
 	let userId = getUserId;
+	// let mealPlans;
+	let test;
 	const userData = {
 		userId
 	};
@@ -26,8 +28,10 @@
 		});
 
 		const res = await resp.json();
-
-		return res;
+		// mealPlans = res;
+		// test = mealPlans[0].id;
+		// console.log(mealPlans[0].id);
+		// return res;
 	}
 	// Get week range for Header
 	function getWeekRange(d) {
@@ -86,14 +90,13 @@
 		}
 	}
 
-
 	// DATA
 
 	let date = new Date();
 	let month = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
 	let week = getWeekRange(date);
 
-  let showDate = [];
+	let showDate = [];
 	let todayDate = new Date();
 	let currentMonday = getMonday(todayDate);
 	let currentWeekend = addDays(currentMonday, 6);
@@ -101,23 +104,30 @@
 	let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 	// just for demo purposes lol
-	let mealPlans = {
+	let mealPlans = [{
 		Mdate: '20/12/2023',
 		Mmeal: 'Lunch',
 		meal: 'Pasta',
 		kcal: 240,
 		image:
 			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
-	};
+	},{
+		Mdate: '18/12/2023',
+		Mmeal: 'Lunch',
+		meal: 'Pasta',
+		kcal: 240,
+		image:
+			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+	}]
 
-  // Converting Date
-  $: for (let i = 0; i < dateArray.length; i++) {
-		 showDate[i] = dateArray[i].toLocaleDateString('en-GB');
-		}
 	
- 
+	// Converting Date
+	$: for (let i = 0; i < dateArray.length; i++) {
+		showDate[i] = dateArray[i].toLocaleDateString('en-GB');
+	}
 </script>
 
+<h4>{test}</h4>
 
 <div>
 	<div class="header">
@@ -137,12 +147,12 @@
 					<h4>{date}</h4>
 					{#each ['Breakfast', 'Lunch', 'Dinner'] as meal}
 						<div class="meal-card">
-							{#if mealPlans.Mdate === date}
-								{#if mealPlans.Mmeal === meal}
-									<h4>{meal}</h4>
-									<img src={mealPlans.image} alt={meal} />
-									<h5>{mealPlans.meal}</h5>
-									<p>{mealPlans.kcal} kcal</p>
+							{#if mealPlans[0].Mdate === date}
+								{#if mealPlans[0].Mmeal === meal}
+									<h4>{mealPlans[0].meal}</h4>
+									<img src={mealPlans[0].image} alt={meal} />
+									<h5>{mealPlans[0].meal}</h5>
+									<p>{mealPlans[0].kcal} kcal</p>
 								{:else}
 									No record
 								{/if}
