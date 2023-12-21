@@ -1,88 +1,70 @@
-import { IsLoggedIn } from '../utils/stores.js';
+import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
+import { IsLoggedIn } from './stores.js';
 
 
-  "token": "",
-  "userId": ""
-}
 
-// Function to handle successful authentication
-function handleSuccessfulAuthentication() {
-  IsLoggedIn.set(true);
-  // You can add any additional logic here after successful authentication
-}
 
+
+const emptyAuth = {
+	"token": "",
+	"userId": ""
+  }
 
 export function logOut() {
-  localStorage.setItem("auth", JSON.stringify(emptyAuth));
-  IsLoggedIn.set(false);
-  return true;
+	localStorage.setItem('auth', JSON.stringify(emptyAuth));
+	IsLoggedIn.set(false);
+	goto('users/sign-in/');
+	return true;
 }
 
 export function getUserId() {
-
-  const auth = localStorage.getItem("auth")
-  if (auth) {
-    return JSON.parse(auth)["userId"]
+	const auth = localStorage.getItem("auth")
+	if (auth) {
+	  return JSON.parse(auth)["userId"]
+	}
+	return null
   }
-  return null;
-}
-
 
 export function getTokenFromLocalStorage() {
-  const auth = localStorage.getItem("auth");
-  console.log('Token from localStorage:', auth);
-  
-  if (auth) {
-    return JSON.parse(auth)["token"];
-  }
-  
-  return null;
+	const auth = localStorage.getItem('auth');
+	if (auth) {
+		return JSON.parse(auth)['token'];
+	}
+	return null;
 }
 
-export async function isLoggedIn() {
-  const token = getTokenFromLocalStorage();
-  console.log('Token in isLoggedIn:', token);
-  if (!token) {
-    IsLoggedIn.set(false);
-    console.log('User is not logged in');
-    return false;
+export async function isValidToken() {
+  if (!getTokenFromLocalStorage()) {
+    return false
   }
 
-  const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-  const url = new URL('/auth-refresh', baseUrl);
-  
-  console.log('Fetch URL:', url);
-
   try {
+    const token = getTokenFromLocalStorage();
     const resp = await fetch(
-      url,
+      PUBLIC_BACKEND_BASE_URL + '/users/login/authenticate',
       {
-        method: 'GET',
+        method: 'POST',
         mode: 'cors',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
       }
     );
 
-    console.log('Response status:', resp.status);
-
     if (resp.status == 200) {
-      IsLoggedIn.set(true);
-      return true;
+
+      IsLoggedIn.set(true)
+      return true
     }
 
-    IsLoggedIn.set(false);
-    return false;
-  } catch (error) {
-    console.error('Error in isLoggedIn:', error);
-    IsLoggedIn.set(false);
-    return false;
+    return false
+  } catch {
+    return false
   }
 }
 
 export async function authenticateUser(email, password) {
-
 	const resp = await fetch(PUBLIC_BACKEND_BASE_URL + '/users/login', {
 		method: 'POST',
 		mode: 'cors',
@@ -103,7 +85,7 @@ export async function authenticateUser(email, password) {
 		  "token": res.result.token,
 		  "userId": res.result.Id
 		}));
-		isLoggedIn.set(true)
+		IsLoggedIn.set(true)
 	
 		return {
 		  success: true,
@@ -115,5 +97,4 @@ export async function authenticateUser(email, password) {
 		success: false,
 		res: res
 	  }
-
 }
