@@ -1,6 +1,13 @@
 <script>
-    import { isLoggedIn } from '../utils/auth';
-    import { logOut } from '../utils/auth';
+    import { isLoggedIn, logOut } from '../utils/auth.js';
+    import { onMount } from 'svelte';
+    import { writable } from 'svelte/store';
+
+    let IsLoggedIn = writable(false);
+
+    onMount(async () => {
+        IsLoggedIn.set(await isLoggedIn());
+    });
 </script>
 
 <header class="bg-white text-black relative h-20 pl-20 ">
@@ -16,12 +23,11 @@
         <a href="/users/new" class="mr-4 font-light">Sign Up</a>
        
 
-    {#if $isLoggedIn == false}
-    <a href="/users/login" class =" font-light">Login</a>
-	{:else}
-    <button class=" font-light" on:click={logOut}>Log Out</button>
-		
-	{/if}
+        {#if $IsLoggedIn == false}
+        <a href="/users/login" class =" font-light">Login</a>
+        {:else}
+        <button class=" font-light" on:click={logOut}>Log Out</button>
+        {/if}
      
     </div>
 </header>

@@ -175,47 +175,50 @@
 {/if}
 
 <style>
-	.week-controls {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
 
-	.days {
-		display: flex;
-		flex-grow: 1;
-		gap: 0;
-		justify-content: center;
-		margin-bottom: 50px;
-	}
+  
+  .week-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-	.day-card {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 0;
-		align-items: center;
-		font-size: 1em;
-		margin-left: 0px;
-		margin-right: 0px;
-	}
+  .days {
+    display: flex;
+    flex-grow: 1;
+    gap: 0;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
 
-	.meal-card {
-		background-color: rgb(255, 255, 255);
-		border: 1px solid #ccc;
-		box-shadow:
-			0 2px 4px 0 rgba(0, 0, 0, 0.2),
-			0 3px 10px 0 rgba(0, 0, 0, 0.19);
-		padding: 0px;
-		margin-top: 0px;
-		margin-left: 0;
-		margin-right: 0;
-		width: 150px;
-		height: 200px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+  .day-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    align-items: center;
+    font-size: 1em;
+    margin-left: 0px; 
+    margin-right: 0px;  
+  }
+
+  .meal-card {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #ebebeb;
+    border-radius: 0.125rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    padding: 0px; 
+    margin-top: 5px; 
+    margin-left: 0; 
+    margin-right: 0; 
+    width: 150px; 
+    height: 200px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+}
 	.nomeal-card {
 		background-color: rgb(203, 203, 203);
 		border: 1px solid #ccc;
@@ -233,60 +236,59 @@
 		align-items: center;
 	}
 
-	.meal-card img {
-		display: block;
-		margin: auto;
-		width: 60%;
-		height: 40%;
-		object-fit: cover;
-	}
+  .meal-card img {
+    display: block;
+    margin: auto;
+    width: 60%; 
+    height: 40%; 
+    object-fit: cover;
+  }
 
-	h1 {
-		font-size: 2.5em;
-	}
+  h1 {
+    font-size: 2.5em; 
+  }
 
-	.header {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		padding-left: 60px;
-		justify-content: center;
-		align-items: center;
-	}
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+    padding-left: 60px;
+    justify-content: center;
+    align-items: center; 
+  }
 
-	h1,
-	h2,
-	h3 {
-		margin: 0;
-		font-weight: 600;
-	}
+  h1, h2, h3 {
+    margin: 0;
+    font-weight: 600;
+  }
 
-	h1 {
-		font-size: 2.5em;
-	}
+  h1 {
+    font-size: 2.5em; 
+  }
 
-	h2 {
-		font-size: 1.3em;
-		margin-top: 10px;
-	}
+  h2 {
+    font-size: 1.3em;
+    margin-top: 10px; 
+  }
 
-	h3 {
-		font-size: 1.2em;
-	}
+  h3 {
+    font-size: 1.2em; 
+  }
 
-	.meal-card h4 {
-		font-size: 0.8em;
-	}
+  .meal-card h4 {
+    font-size: 0.8em; 
+  }
 
-	.meal-card p {
-		font-size: 0.6em;
-	}
+  .meal-card p {
+    font-size: 0.6em;
+  }
 
-	.week-navigation {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 10px;
-		margin-bottom: 50px;
-	}
+  .week-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 50px;
+  }
 </style>
+
