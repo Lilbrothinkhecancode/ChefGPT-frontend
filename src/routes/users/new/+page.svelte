@@ -1,6 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
-  import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
+    import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
 
 
 	let formErrors = {};

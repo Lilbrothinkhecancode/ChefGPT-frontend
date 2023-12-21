@@ -123,8 +123,6 @@
                         <div>
     
                             <img class="items-start pb-4 max-w-sm rounded" src={recipe.image} alt={recipe.title}>  
-                            <!-- buttons -->
-                            
                             <h3 class = "text-xl text-black pr-4">{recipe.title}   </h3> 
                             <p class='text-xs text-slate-500' pb-6>  {recipe.nutrition.nutrients[0].amount} kcal </p>
                            
