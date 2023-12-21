@@ -2,10 +2,10 @@
 	import { getUserId } from '../../utils/auth';
 	import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
+	import { isLoggedIn } from '../../utils/auth';
 
 	let userId = getUserId;
-	// let mealPlans;
-	let test;
+	let mealPlans=[];
 	const userData = {
 		userId
 	};
@@ -28,11 +28,11 @@
 		});
 
 		const res = await resp.json();
-		// mealPlans = res;
-		// test = mealPlans[0].id;
-		// console.log(mealPlans[0].id);
-		// return res;
+		mealPlans=res;
+		console.log(mealPlans)
+		
 	}
+
 	// Get week range for Header
 	function getWeekRange(d) {
 		let start = d.getDate() - d.getDay() + 1;
@@ -104,30 +104,34 @@
 	let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 	// just for demo purposes lol
-	let mealPlans = [
-		{
-			Mdate: '20/12/2023',
-			Mmeal: 'Lunch',
-			meal: 'Pasta',
-			kcal: 240,
-			image:
-				'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
-		},
-		{
-			Mdate: '18/12/2023',
-			Mmeal: 'Breakfast',
-			meal: 'Bowl',
-			kcal: 520,
-			image:
-				'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
-		}
-	];
+	// let mealPlans = 
+	// [
+	// 	{
+	// 		date: '20/12/2023',
+	// 		meal: 'Lunch',
+	// 		name: 'Pasta',
+	// 		kcal: 240,
+	// 		image:
+	// 			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+	// 	},
+	// 	{
+	// 		date: '18/12/2023',
+	// 		meal: 'Breakfast',
+	// 		name: 'Bowl',
+	// 		kcal: 520,
+	// 		image:
+	// 			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+	// 	}
+	// ];
 
 	// Converting Date
 	$: for (let i = 0; i < dateArray.length; i++) {
 		showDate[i] = dateArray[i].toLocaleDateString('en-GB');
 	}
 </script>
+
+
+{#if $isLoggedIn == true}
 
 <div>
 	<div class="header">
@@ -139,8 +143,6 @@
 		</div>
 	</div>
 
-	
-
 	<div class="week-controls">
 		<div class="days">
 			{#each showDate as date, i}
@@ -148,18 +150,16 @@
 					<h4>{days[i]}</h4>
 					<h4>{date}</h4>
 					{#each ['Breakfast', 'Lunch', 'Dinner'] as meal}
-						<div class="meal-card">
-							{#each mealPlans as mealP, j}
-								{#if mealPlans[j].Mdate === date}
-									{#if mealPlans[j].Mmeal === meal}
-										<img src={mealPlans[j].image} alt="Breakfast" />
-										<h5>{mealPlans[j].meal}</h5>
-										<p>{mealPlans[j].kcal} kcal</p>
-									{:else}
-										No record
+						<div class="nomeal-card">
+							{#each mealPlans as mealP}
+								{#if mealP.date === date}
+									{#if mealP.meal === meal}
+										<div class="meal-card">
+											<img src={mealP.image} alt="Breakfast" />
+											<h5>{mealP.name}</h5>
+											<p>{mealP.kcal} kcal</p>
+										</div>
 									{/if}
-								{:else}
-									No record
 								{/if}
 							{/each}
 						</div>
@@ -169,6 +169,10 @@
 		</div>
 	</div>
 </div>
+{:else}
+ <h1> YOU ARE NOT LOGGED IN </h1>
+	
+{/if}
 
 <style>
 	.week-controls {
@@ -197,6 +201,23 @@
 	}
 
 	.meal-card {
+		background-color: rgb(255, 255, 255);
+		border: 1px solid #ccc;
+		box-shadow:
+			0 2px 4px 0 rgba(0, 0, 0, 0.2),
+			0 3px 10px 0 rgba(0, 0, 0, 0.19);
+		padding: 0px;
+		margin-top: 0px;
+		margin-left: 0;
+		margin-right: 0;
+		width: 150px;
+		height: 200px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.nomeal-card {
+		background-color: rgb(203, 203, 203);
 		border: 1px solid #ccc;
 		box-shadow:
 			0 2px 4px 0 rgba(0, 0, 0, 0.2),
