@@ -104,30 +104,30 @@
 	let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 	// just for demo purposes lol
-	let mealPlans = [{
-		Mdate: '20/12/2023',
-		Mmeal: 'Lunch',
-		meal: 'Pasta',
-		kcal: 240,
-		image:
-			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
-	},{
-		Mdate: '18/12/2023',
-		Mmeal: 'Lunch',
-		meal: 'Pasta',
-		kcal: 240,
-		image:
-			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
-	}]
+	let mealPlans = [
+		{
+			Mdate: '20/12/2023',
+			Mmeal: 'Lunch',
+			meal: 'Pasta',
+			kcal: 240,
+			image:
+				'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+		},
+		{
+			Mdate: '18/12/2023',
+			Mmeal: 'Breakfast',
+			meal: 'Bowl',
+			kcal: 520,
+			image:
+				'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+		}
+	];
 
-	
 	// Converting Date
 	$: for (let i = 0; i < dateArray.length; i++) {
 		showDate[i] = dateArray[i].toLocaleDateString('en-GB');
 	}
 </script>
-
-<h4>{test}</h4>
 
 <div>
 	<div class="header">
@@ -139,6 +139,8 @@
 		</div>
 	</div>
 
+	
+
 	<div class="week-controls">
 		<div class="days">
 			{#each showDate as date, i}
@@ -147,18 +149,19 @@
 					<h4>{date}</h4>
 					{#each ['Breakfast', 'Lunch', 'Dinner'] as meal}
 						<div class="meal-card">
-							{#if mealPlans[0].Mdate === date}
-								{#if mealPlans[0].Mmeal === meal}
-									<h4>{mealPlans[0].meal}</h4>
-									<img src={mealPlans[0].image} alt={meal} />
-									<h5>{mealPlans[0].meal}</h5>
-									<p>{mealPlans[0].kcal} kcal</p>
+							{#each mealPlans as mealP, j}
+								{#if mealPlans[j].Mdate === date}
+									{#if mealPlans[j].Mmeal === meal}
+										<img src={mealPlans[j].image} alt="Breakfast" />
+										<h5>{mealPlans[j].meal}</h5>
+										<p>{mealPlans[j].kcal} kcal</p>
+									{:else}
+										No record
+									{/if}
 								{:else}
 									No record
 								{/if}
-							{:else}
-								No record
-							{/if}
+							{/each}
 						</div>
 					{/each}
 				</div>
