@@ -1,13 +1,8 @@
 <script>
-    import { isLoggedIn, logOut } from '../utils/auth.js';
+    import { logOut } from '../utils/auth.js';
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
+    import { IsLoggedIn } from '../utils/stores.js';
 
-    let IsLoggedIn = writable(false);
-
-    onMount(async () => {
-        IsLoggedIn.set(await isLoggedIn());
-    });
 </script>
 
 <header class="bg-white text-black relative h-20 pl-20 ">

@@ -2,7 +2,7 @@
 	import { getUserId } from '../../utils/auth';
 	import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
 	import { onMount } from 'svelte';
-	import { isLoggedIn } from '../../utils/auth';
+	import { IsLoggedIn } from '../../utils/stores.js';
 
 	let userId = getUserId;
 	let mealPlans=[];
@@ -130,7 +130,7 @@
 </script>
 
 
-{#if $isLoggedIn == true}
+{#if $IsLoggedIn == true}
 
 <div>
 	<div class="header">
@@ -207,7 +207,7 @@
     border-radius: 0.125rem;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     padding: 0px; 
-    margin-top: 5px; 
+    margin-top: 0px; 
     margin-left: 0; 
     margin-right: 0; 
     width: 150px; 
