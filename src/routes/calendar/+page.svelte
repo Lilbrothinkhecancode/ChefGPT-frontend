@@ -93,7 +93,6 @@
 	// DATA
 
 	let date = new Date();
-	let month = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
 	let week = getWeekRange(date);
 
 	let showDate = [];
@@ -218,7 +217,7 @@
     align-items: center;
   }
 
-}
+
 	.nomeal-card {
 		background-color: rgb(203, 203, 203);
 		border: 1px solid #ccc;
@@ -257,7 +256,7 @@
     align-items: center; 
   }
 
-  h1, h2, h3 {
+  h1,  h3 {
     margin: 0;
     font-weight: 600;
   }
@@ -266,18 +265,13 @@
     font-size: 2.5em; 
   }
 
-  h2 {
-    font-size: 1.3em;
-    margin-top: 10px; 
-  }
+  
 
   h3 {
     font-size: 1.2em; 
   }
 
-  .meal-card h4 {
-    font-size: 0.8em; 
-  }
+
 
   .meal-card p {
     font-size: 0.6em;
