@@ -1,6 +1,6 @@
 import { IsLoggedIn } from '../utils/stores.js';
 
-const emptyAuth = {
+
   "token": "",
   "userId": ""
 }
@@ -11,6 +11,7 @@ function handleSuccessfulAuthentication() {
   // You can add any additional logic here after successful authentication
 }
 
+
 export function logOut() {
   localStorage.setItem("auth", JSON.stringify(emptyAuth));
   IsLoggedIn.set(false);
@@ -18,12 +19,14 @@ export function logOut() {
 }
 
 export function getUserId() {
+
   const auth = localStorage.getItem("auth")
   if (auth) {
     return JSON.parse(auth)["userId"]
   }
   return null;
 }
+
 
 export function getTokenFromLocalStorage() {
   const auth = localStorage.getItem("auth");
@@ -79,57 +82,38 @@ export async function isLoggedIn() {
 }
 
 export async function authenticateUser(email, password) {
-  const baseUrl = import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL;
-  const url = new URL('/auth', baseUrl);
 
-  try {
-    const resp = await fetch(
-      url,
-      {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      }
-    );
+	const resp = await fetch(PUBLIC_BACKEND_BASE_URL + '/users/login', {
+		method: 'POST',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			email: email,
+			password: password
+		})
+	});
 
-    const res = await resp.json();
+	const res = await resp.json();
 
-    if (resp.status == 200 && res.result && res.result.token && res.result.Id) {
-      const auth = {
-        "token": res.result.token,
-        "userId": res.result.Id
-      };
-      console.log('Auth:', auth); // Log the auth object
 
-      localStorage.setItem("auth", JSON.stringify(auth));
+	if (resp.status == 200) {
+		localStorage.setItem("auth", JSON.stringify({
+		  "token": res.result.token,
+		  "userId": res.result.Id
+		}));
+		isLoggedIn.set(true)
+	
+		return {
+		  success: true,
+		  res: res
+		}
+	  }
+	
+	  return {
+		success: false,
+		res: res
+	  }
 
-      // Log the result of storing the auth object in local storage
-      console.log('Auth in local storage:', localStorage.getItem("auth"));
-
-      // Call the function to handle successful authentication
-      handleSuccessfulAuthentication();
-
-      return {
-        success: true,
-        res: res
-      };
-    } else {
-      throw new Error(`Authentication failed: ${res.error}`);
-    }
-  } catch (error) {
-    console.error('Error in authenticateUser:', error);
-
-    IsLoggedIn.set(false);
-
-    return {
-      success: false,
-      res: null
-    };
-  }
 }
