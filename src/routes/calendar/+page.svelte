@@ -1,66 +1,189 @@
 <script>
-  let date = new Date();
-  let month = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
-  let week = getWeekRange(date);
-  let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  
-  // just for demo purposes lol
-  let mealPlans = { 
-    default: {
-      meal: 'Pasta',
-      kcal: 240,
-      image: 'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+	import { getUserId } from '../../utils/auth';
+	import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
+	import { onMount } from 'svelte';
+	import { IsLoggedIn } from '../../utils/stores.js';
+    import { goto } from '$app/navigation';
+
+	let userId = getUserId;
+	let mealPlans=[];
+	const userData = {
+		userId
+	};
+
+	onMount(() => {
+		getCalendar();
+	});
+
+	// FUNCTIONS
+
+	// Get user records
+	async function getCalendar() {
+		const resp = await fetch(PUBLIC_BACKEND_BASE_URL + '/calendar/fetch', {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(userData)
+		});
+
+		const res = await resp.json();
+		mealPlans=res;
+		console.log(mealPlans)
+		
+	}
+
+	// Get week range for Header
+	function getWeekRange(d) {
+		let start = d.getDate() - d.getDay() + 1;
+		let end = start + 6;
+		let weekStart = new Date(d.getFullYear(), d.getMonth(), start);
+		let weekEnd = new Date(d.getFullYear(), d.getMonth(), end);
+		let weekMonth = weekStart.toLocaleString('default', { month: 'long' });
+		return `${weekStart.getDate()} - ${weekEnd.getDate()} ${weekMonth}`;
+	}
+
+	// Adding days to a date
+	function addDays(date, days) {
+		var result = new Date(date);
+		result.setDate(result.getDate() + days);
+		return result;
+	}
+
+	// Get dates between two dates
+	function getDates(startDate, stopDate) {
+		var dateArray = new Array();
+		var currentDate = startDate;
+		while (currentDate <= stopDate) {
+			dateArray.push(new Date(currentDate));
+			currentDate = addDays(currentDate, 1);
+		}
+		return dateArray;
+	}
+
+	// Finding Monday of  corresponding date
+
+	function getMonday(d) {
+		d = new Date(d);
+		var day = d.getDay(),
+			diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+		return new Date(d.setDate(diff));
+	}
+
+	// Moving to previous week
+
+	function previousWeek() {
+		date.setDate(date.getDate() - 7);
+		week = getWeekRange(date);
+		for (let i = 0; i < dateArray.length; i++) {
+			dateArray[i] = addDays(dateArray[i], -7);
+		}
+	}
+
+	// Moving to next week
+
+	function nextWeek() {
+		date.setDate(date.getDate() + 7);
+		week = getWeekRange(date);
+		for (let i = 0; i < dateArray.length; i++) {
+			dateArray[i] = addDays(dateArray[i], 7);
+		}
+	}
+
+	// DATA
+
+	let date = new Date();
+	let week = getWeekRange(date);
+
+	let showDate = [];
+	let todayDate = new Date();
+	let currentMonday = getMonday(todayDate);
+	let currentWeekend = addDays(currentMonday, 6);
+	let dateArray = getDates(currentMonday, currentWeekend); // Creating an array for the dates of the week
+	let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+	// just for demo purposes lol
+	// let mealPlans = 
+	// [
+	// 	{
+	// 		date: '20/12/2023',
+	// 		meal: 'Lunch',
+	// 		name: 'Pasta',
+	// 		kcal: 240,
+	// 		image:
+	// 			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+	// 	},
+	// 	{
+	// 		date: '18/12/2023',
+	// 		meal: 'Breakfast',
+	// 		name: 'Bowl',
+	// 		kcal: 520,
+	// 		image:
+	// 			'https://www.foodandwine.com/thmb/c-MBu_vMHq3EcoN_KPxwg-oZjKo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Pasta-Aglio-E-Olio-2-FT-RECIPE0123-38cd2045646a4635a80e8166f085fc7e.jpg'
+	// 	}
+	// ];
+
+	// Converting Date
+	$: for (let i = 0; i < dateArray.length; i++) {
+		showDate[i] = dateArray[i].toLocaleDateString('en-GB');
+	}
+
+	function navigateToLogin() {
+    goto('users/login');
     }
-  };
-
-  function getWeekRange(d) {
-  let start = d.getDate() - d.getDay() + 1;
-  let end = start + 6; 
-  let weekStart = new Date(d.getFullYear(), d.getMonth(), start);
-  let weekEnd = new Date(d.getFullYear(), d.getMonth(), end);
-  let weekMonth = weekStart.toLocaleString('default', { month: 'long' });
-  return `${weekStart.getDate()} - ${weekEnd.getDate()} ${weekMonth}`;
-}
-
-  function previousWeek() {
-    date.setDate(date.getDate() - 7);
-    week = getWeekRange(date);
-  }
-
-  function nextWeek() {
-    date.setDate(date.getDate() + 7);
-    week = getWeekRange(date);
-  }
+	// "let's login first" navigation
+	
 </script>
 
+
+{#if $IsLoggedIn == true}
+
 <div>
-  <div class="header">
-    <h1>Meal Prep</h1>
-    <h2>{month}</h2>
-    <div class="week-navigation">
-      <button on:click={previousWeek}>&lt;</button>
-      <h3>{week}</h3>
-      <button on:click={nextWeek}>&gt;</button>
-    </div>
-  </div>
-  <div class="week-controls">
-    <div class="days">
-      {#each days as day (day)}
-  <div class="day-card">
-    <h4>{day}</h4>
-    {#each ['Breakfast', 'Lunch', 'Dinner'] as meal (meal)}
-      <div class="meal-card">
-        <h4>{meal}</h4>
-        <img src={mealPlans[week]?.image || mealPlans.default.image} alt={meal} />
-        <h5>{mealPlans[week]?.meal || mealPlans.default.meal}</h5>
-        <p>{mealPlans[week]?.kcal || mealPlans.default.kcal} kcal</p>
-      </div>
-    {/each}
-  </div>
-{/each}
-    </div>
-  </div>
+	<div class="header">
+		<h1>Meal Prep</h1>
+		<div class="week-navigation">
+			<button on:click={previousWeek}>&lt;</button>
+			<h3>{week}</h3>
+			<button on:click={nextWeek}>&gt;</button>
+		</div>
+	</div>
+
+	<div class="week-controls">
+		<div class="days">
+			{#each showDate as date, i}
+				<div class="day-card">
+					<h4>{days[i]}</h4>
+					<h4>{date}</h4>
+					{#each ['Breakfast', 'Lunch', 'Dinner'] as meal}
+						<div class="nomeal-card">
+							{#each mealPlans as mealP}
+								{#if mealP.date === date}
+									{#if mealP.meal === meal}
+										<div class="meal-card">
+											<img src={mealP.image} alt="Breakfast" />
+											<h5>{mealP.name}</h5>
+											<p>{mealP.kcal} kcal</p>
+										</div>
+									{/if}
+								{/if}
+							{/each}
+						</div>
+					{/each}
+				</div>
+			{/each}
+		</div>
+	</div>
 </div>
+{:else}
+ <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+	<strong class="font-bold">Holy smokes!</strong>
+	<span class="block sm:inline">Let's <a on:click|preventDefault={navigateToLogin} class="underline text-red-500">login</a> first!</span>
+	<span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+	  <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+	</span>
+  </div>
+{/if}
 
 <style>
 
@@ -91,11 +214,12 @@
   }
 
   .meal-card {
+    background-color: rgb(255, 255, 255);
     border: 1px solid #ebebeb;
     border-radius: 0.125rem;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     padding: 0px; 
-    margin-top: 5px; 
+    margin-top: 0px; 
     margin-left: 0; 
     margin-right: 0; 
     width: 150px; 
@@ -104,6 +228,24 @@
     flex-direction: column;
     align-items: center;
   }
+
+
+	.nomeal-card {
+		background-color: rgb(203, 203, 203);
+		border: 1px solid #ccc;
+		box-shadow:
+			0 2px 4px 0 rgba(0, 0, 0, 0.2),
+			0 3px 10px 0 rgba(0, 0, 0, 0.19);
+		padding: 0px;
+		margin-top: 5px;
+		margin-left: 0;
+		margin-right: 0;
+		width: 150px;
+		height: 200px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 
   .meal-card img {
     display: block;
@@ -126,7 +268,7 @@
     align-items: center; 
   }
 
-  h1, h2, h3 {
+  h1,  h3 {
     margin: 0;
     font-weight: 600;
   }
@@ -135,18 +277,13 @@
     font-size: 2.5em; 
   }
 
-  h2 {
-    font-size: 1.3em;
-    margin-top: 10px; 
-  }
+  
 
   h3 {
     font-size: 1.2em; 
   }
 
-  .meal-card h4 {
-    font-size: 0.8em; 
-  }
+
 
   .meal-card p {
     font-size: 0.6em;
@@ -160,3 +297,4 @@
     margin-bottom: 50px;
   }
 </style>
+
