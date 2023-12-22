@@ -163,7 +163,6 @@
 										<div class="meal-card">
 											<img src={mealP.image} alt="Breakfast" />
 											<h5>{mealP.name}</h5>
-											<p>{mealP.kcal} kcal</p>
 										</div>
 									{/if}
 								{/if}
