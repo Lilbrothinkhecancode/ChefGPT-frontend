@@ -3,33 +3,33 @@
     import { bookmarkedRecipes } from '../../../utils/stores.js';
     export let data;
     import SvelteMarkdown from 'svelte-markdown';
-    import { user, IsLoggedIn } from '../../../utils/stores.js'; // import user and IsLoggedIn stores
+    import { user, IsLoggedIn } from '../../../utils/stores.js'; 
     let isSaved = false;
 
     let isLoggedIn = false;
-    let userId; // Add this line
+    let userId; 
 
-    // Subscribe to the IsLoggedIn and user stores
+
     IsLoggedIn.subscribe(value => {
         isLoggedIn = value;
     });
 
     user.subscribe(value => {
-        console.log('User store value:', value); // Log the value of the user store
+        console.log('User store value:', value); 
         if (value) {
             userId = value.id;
         }
     });
 
     const saveRecipe = async () => {
-    const token = getTokenFromLocalStorage(); // Get the token
+    const token = getTokenFromLocalStorage(); 
 
     if (!token) {
         console.error('No token found');
         return;
     }
 
-    console.log('Backend API URL:', import.meta.env.VITE_PUBLIC_BACKEND_API); // Log the backend API URL
+    console.log('Backend API URL:', import.meta.env.VITE_PUBLIC_BACKEND_API); 
 
     const response = await fetch(`${import.meta.env.VITE_PUBLIC_BACKEND_API}/recipe`, {
     method: 'POST',
@@ -37,7 +37,7 @@
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({ url: window.location.href }) // Send recipeUrl in the body
+    body: JSON.stringify({ url: window.location.href }) 
 });
 if (response.ok) {
             const recipe = await response.json();
@@ -68,13 +68,14 @@ if (response.ok) {
                     </button>
                 </div>
                 <div class = "save recipe button mr-2">
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow flex items-center justify-center">
-
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow flex items-center justify-center"
+                        on:click={saveRecipe}>
+                
                         <svg viewBox="0 0 24 24" height="18" width="18" class="mr-2">
                             <path d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z" fill="#ffffff"></path>
                         </svg>
-
+                
                         <span>
                             {#if isSaved}
                                 Saved
