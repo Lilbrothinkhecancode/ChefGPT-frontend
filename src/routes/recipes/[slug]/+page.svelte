@@ -1,16 +1,22 @@
 <script>
-    import { getTokenFromLocalStorage } from '../../../utils/auth.js';
-    import { bookmarkedRecipes } from '../../../utils/stores.js';
-    export let data;
-    import SvelteMarkdown from 'svelte-markdown';
-    import { user, IsLoggedIn } from '../../../utils/stores.js'; 
+
+	export let data;
+	import { getUserId } from '../../../utils/auth';
+  import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
+  import { getTokenFromLocalStorage } from '../../../utils/auth.js';
+  import { bookmarkedRecipes } from '../../../utils/stores.js';
+  import SvelteMarkdown from 'svelte-markdown';
+  import { user, IsLoggedIn } from '../../../utils/stores.js'; 
+  export let data;
+  
     let isSaved = false;
-
     let isLoggedIn = false;
-    let userId; 
+    let userId;   
 
-
-    IsLoggedIn.subscribe(value => {
+    let userId= getUserId();
+    let formErrors = {};
+  
+   IsLoggedIn.subscribe(value => {
         isLoggedIn = value;
     });
 
@@ -20,7 +26,7 @@
             userId = value.id;
         }
     });
-
+  
     const saveRecipe = async () => {
     const token = getTokenFromLocalStorage(); 
 
@@ -28,6 +34,7 @@
         console.error('No token found');
         return;
     }
+      
 
     console.log('Backend API URL:', import.meta.env.VITE_PUBLIC_BACKEND_API); 
 
@@ -45,7 +52,74 @@ if (response.ok) {
             isSaved = true;
         }
 };
-</script>
+   
+
+	function padTo2Digits(num) {
+		return num.toString().padStart(2, '0');
+	}
+
+	function formatDate(date) {
+		return [
+			date.getFullYear(),
+			padTo2Digits(date.getMonth() + 1),
+			padTo2Digits(date.getDate())
+		].join('-');
+	}
+
+    function convertDate(dateString){
+        var p = dateString.split(/\D/g)
+        return [p[2],p[1],p[0] ].join("/")
+    }
+    
+
+	
+    let currentDate = formatDate(new Date());
+
+	
+
+	async function save(title,image) {
+        let dateControl = document.querySelector('input[type="date"]');
+        let saveDate = convertDate(dateControl.value)//"11-9-2001"
+
+        let e = document.getElementById("mealTime");
+        let value = e.value;
+        let mealTime = e.options[e.selectedIndex].text;
+
+        if (mealTime == "Meal Time") {
+           formErrors["Result"] = "Please choose a meal time";       
+
+		} else {
+		    const saveData = {
+			userID: userId,
+			date: saveDate,
+			meal: mealTime,
+			name: title,
+			image: image
+            };
+
+            const resp = await fetch(PUBLIC_BACKEND_BASE_URL + '/calendar/add', {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(saveData)
+		}); 
+        
+        if (resp.status == 200) {
+			formErrors["Result"] = "Successfully added"; 
+			
+		} else {
+			formErrors["Result"] = "Failed to add"; 
+		}
+
+	}}
+
+
+
+
+
+
 
 <div class="pt-8 pl-24 pr-24"> 
     <p class="font-bold text-4xl pb-2">
@@ -55,10 +129,24 @@ if (response.ok) {
         <div>
 
             <img class="items-start pb-4 max-w-sm rounded" src={data.recipe.image} alt={data.recipe.title}>  
+              <input
+				type="date"
+				id="saveDate"
+				name="saveDate"
+				value={currentDate}
+				min={currentDate}
+				max="2025-12-31"
+			/>
+             <select id = "mealTime" class="select w-50 max-w-xs">
+                <option disabled selected>Meal Time</option>
+                <option>Breakfast</option>
+                <option>Lunch</option>
+                <option>Dinner</option>
+              </select>
 
             <div class="flex flex-row">
                 <div class="meal prep button mr-2">
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow flex items-center justify-center">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow flex items-center justify-center" on:click={save(data.recipe.title,data.recipe.image)}>
                         <svg viewBox="0 0 24 24" height="18" width="18" class="mr-2">
                             <path d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#ffffff"></path>
@@ -98,6 +186,11 @@ if (response.ok) {
 
                 </div>
             </div>
+                             {#if 'Result' in formErrors}
+            <label class="label" for="email">
+                <span class="label-text-alt text-red-500">{formErrors['Result']}</span>
+            </label>
+            {/if}
 
 
             <p class="text-xl pt-4"> Summary </p>
@@ -112,20 +205,3 @@ if (response.ok) {
             <div>
                 
             </div>
-            
-        </div>
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
