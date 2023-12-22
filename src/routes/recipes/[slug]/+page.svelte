@@ -1,7 +1,7 @@
 <script>
 
-	export let data;
-	import { getUserId } from '../../../utils/auth';
+
+  import { getUserId } from '../../../utils/auth';
   import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
   import { getTokenFromLocalStorage } from '../../../utils/auth.js';
   import { bookmarkedRecipes } from '../../../utils/stores.js';
@@ -13,7 +13,7 @@
     let isLoggedIn = false;
     let userId;   
 
-    let userId= getUserId();
+    let userIdentity= getUserId();
     let formErrors = {};
   
    IsLoggedIn.subscribe(value => {
@@ -90,7 +90,7 @@ if (response.ok) {
 
 		} else {
 		    const saveData = {
-			userID: userId,
+			userID: userIdentity,
 			date: saveDate,
 			meal: mealTime,
 			name: title,
@@ -115,7 +115,7 @@ if (response.ok) {
 
 	}}
 
-
+</script>
 
 
 
@@ -126,8 +126,7 @@ if (response.ok) {
         {data.recipe.title}
     </p>
     <div class="flex flex-row gap-6">
-        <div>
-
+    </div>
             <img class="items-start pb-4 max-w-sm rounded" src={data.recipe.image} alt={data.recipe.title}>  
               <input
 				type="date"
@@ -205,3 +204,4 @@ if (response.ok) {
             <div>
                 
             </div>
+        </div>
