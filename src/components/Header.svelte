@@ -13,7 +13,6 @@
 
     <div class="absolute top-0 right-0 pr-20 flex items-center h-full gap-5">
         <a href="/calendar" class="mr-4 font-light ">Calendar</a>
-        <a href="/users/profile" class="mr-4 font-light">My Kitchen</a>
         <a href="/bookmarks" class="mr-4 font-light ">Bookmarks</a>
         <a href="/users/new" class="mr-4 font-light">Sign Up</a>
        
