@@ -1,6 +1,4 @@
 <script>
-
-
   import { getUserId } from '../../../utils/auth';
   import { PUBLIC_BACKEND_BASE_URL } from '$env/static/public';
   import { getTokenFromLocalStorage } from '../../../utils/auth.js';
@@ -8,13 +6,26 @@
   import SvelteMarkdown from 'svelte-markdown';
   import { user, IsLoggedIn } from '../../../utils/stores.js'; 
   export let data;
-  
+ 
+
+   
     let isSaved = false;
     let isLoggedIn = false;
     let userId;   
-
     let userIdentity= getUserId();
     let formErrors = {};
+
+
+    const copyCurrentUrl = async () => {
+    const currentUrl = window.location.href;
+
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      console.log("URL copied to clipboard");
+    } catch (error) {
+      console.error("Unable to copy URL to clipboard", error);
+    }
+  };
   
    IsLoggedIn.subscribe(value => {
         isLoggedIn = value;
@@ -173,8 +184,7 @@ if (response.ok) {
                     </button>
                 </div>
                 <div class="URL button">
-
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow flex items-center justify-center">
+                    <button on:click={copyCurrentUrl} class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow flex items-center justify-center">
                         <svg viewBox="0 0 24 24" height="18" width="18" class="mr-2">
                             <path d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M18 16c-.79 0-1.5.31-2.03.81L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.53.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.48.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.05 4.12c-.05.22-.09.45-.09.69 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3zm0-12c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" fill="#ffffff"></path>
@@ -197,7 +207,7 @@ if (response.ok) {
                 <SvelteMarkdown source={data.recipe.summary} />
             </div>
 
-            <div class="pr-24 pb-8">
+            <div class="pr-24 pb-24">
                 <p class="text-xl"> Instructions </p>
                 <SvelteMarkdown source={data.recipe.instructions} />
             </div>

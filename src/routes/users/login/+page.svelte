@@ -33,8 +33,15 @@
     }
   </script>
   
-  
+  <div class="text-center">
     <h1 class="text-center text-xl font-bold">Log In</h1>
+    <a class="link-hover italic text-xs" href="/users/new"
+    >Don't have an account? Sign Up Here!</a
+  >
+    
+  </div>
+
+   
     
     <div class="flex justify-center items-center mt-8">
       <form on:submit={handleLogin} class="w-1/3">

@@ -8,6 +8,10 @@ module.exports = {
   daisyui: {
     themes: ["cmyk", "dracula"]
 
+
   },
-}
+
+  tailwindConfig: './styles/tailwind.config.js',
+  }
+
 
