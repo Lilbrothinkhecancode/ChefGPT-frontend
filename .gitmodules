@@ -1,0 +1,3 @@
+[submodule "ChefGPT-frontend"]
+    path = ChefGPT-frontend
+    url = https://github.com/Lilbrothinkhecancode/ChefGPT-frontend.git
